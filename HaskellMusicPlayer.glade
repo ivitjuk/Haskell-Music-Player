@@ -1,0 +1,196 @@
+<?xml version="1.0"?>
+<glade-interface>
+  <!-- interface-requires gtk+ 2.16 -->
+  <!-- interface-naming-policy project-wide -->
+  <widget class="GtkWindow" id="mainWindow">
+    <property name="title" translatable="yes">Hakell Music Player</property>
+    <property name="default_width">450</property>
+    <property name="default_height">500</property>
+    <child>
+      <widget class="GtkVBox" id="vbox1">
+        <property name="visible">True</property>
+        <property name="spacing">5</property>
+        <child>
+          <widget class="GtkHBox" id="hbox1">
+            <property name="visible">True</property>
+            <child>
+              <widget class="GtkButton" id="prevButton">
+                <property name="label">gtk-media-previous</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="receives_default">True</property>
+                <property name="relief">none</property>
+                <property name="use_stock">True</property>
+                <property name="focus_on_click">False</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="playButton">
+                <property name="label">gtk-media-play</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="receives_default">True</property>
+                <property name="relief">none</property>
+                <property name="use_stock">True</property>
+                <property name="focus_on_click">False</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="stopButton">
+                <property name="label">gtk-media-stop</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="receives_default">True</property>
+                <property name="relief">none</property>
+                <property name="use_stock">True</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkButton" id="nextButton">
+                <property name="label">gtk-media-next</property>
+                <property name="visible">True</property>
+                <property name="can_focus">False</property>
+                <property name="receives_default">True</property>
+                <property name="relief">none</property>
+                <property name="use_stock">True</property>
+              </widget>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkProgressBar" id="progress">
+                <property name="visible">True</property>
+              </widget>
+              <packing>
+                <property name="padding">10</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="padding">5</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkNotebook" id="tab">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child>
+              <widget class="GtkScrolledWindow" id="scrolledwindow1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="hscrollbar_policy">automatic</property>
+                <property name="vscrollbar_policy">automatic</property>
+                <child>
+                  <widget class="GtkTreeView" id="currentPlaylist">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                  </widget>
+                </child>
+              </widget>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label3">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Current</property>
+              </widget>
+              <packing>
+                <property name="tab_fill">False</property>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkTextView" id="textview1">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Library</property>
+              </widget>
+              <packing>
+                <property name="position">1</property>
+                <property name="tab_fill">False</property>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkTextView" id="textview3">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </widget>
+              <packing>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label2">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Playlists</property>
+              </widget>
+              <packing>
+                <property name="position">2</property>
+                <property name="tab_fill">False</property>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkTextView" id="textview4">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+              </widget>
+              <packing>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <widget class="GtkLabel" id="label4">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Info</property>
+              </widget>
+              <packing>
+                <property name="position">3</property>
+                <property name="tab_fill">False</property>
+                <property name="type">tab</property>
+              </packing>
+            </child>
+          </widget>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <widget class="GtkStatusbar" id="statusbar">
+            <property name="visible">True</property>
+            <property name="spacing">2</property>
+          </widget>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+      </widget>
+    </child>
+  </widget>
+</glade-interface>

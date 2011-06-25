@@ -1,0 +1,17 @@
+Name:           hmp
+Version:        0.0
+Cabal-Version:  >= 1.2
+License:        GPL
+Author:         Ivan Vitjuk (v@iv.id.au)
+Maintainer:     Ivan Vitjuk (v@iv.id.au)
+Synopsis:       Haskell Music Player
+Description:    Haskell Music Player is a client for the MPD (Music Player Daemon)
+Category:       Network, Sound
+Build-Type:     Simple
+License-File:   LICENSE
+
+Executable hmp
+  Build-Depends:  libmpd >= 0.6.0, base, mtl, containers, old-locale, time, glade, gtk 
+  Main-Is:        Main.hs
+  Hs-Source-Dirs: src
+  Other-Modules:  Util, HMP
