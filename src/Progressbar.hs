@@ -85,3 +85,4 @@ setup :: GD.GuiDataRef -> IO ()
 setup gdref = do
   liftIO $ setupSongSeek gdref
   return ()
+
