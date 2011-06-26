@@ -18,7 +18,7 @@ module GuiData
     (
      GuiData(GData),
      GuiDataRef,
-     mpd, pbar, playButton, prevStatus, currentStatus, plist
+     mpd, pbar, playButton, prevStatus, currentStatus, plist, GuiData.currentSong
     ) where
 
 import Network.MPD
@@ -28,19 +28,20 @@ import Data.IORef
 
 import {-# SOURCE #-} qualified Progressbar as PB
 import {-# SOURCE #-} qualified Playlist as PL
+import {-# SOURCE #-} qualified CurrentSong as CS
 
 data GuiData = GData
     {
       mpd :: MPDPersistent,
              
-      pbar :: PB.Data,
-              
       playButton :: Button,
                     
       prevStatus :: Network.MPD.Status,
       currentStatus :: Network.MPD.Status,
                        
-      plist :: PL.Data
+      pbar :: PB.Data,
+      plist :: PL.Data,
+      currentSong :: CS.Data
     }
 
 type GuiDataRef = IORef GuiData

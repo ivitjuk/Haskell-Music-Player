@@ -28,6 +28,7 @@ import Graphics.UI.Gtk.Glade
 import qualified Playlist as PL
 import qualified Progressbar as PB
 import qualified StatusUpdate as SU
+import qualified CurrentSong as CS
 import qualified GuiData as GD
 import qualified Util as U
 import qualified HMP as HMP
@@ -100,14 +101,17 @@ makeGuiRef xml = do
 
   pbar <- liftIO $ PB.init xml
 
+  csong <- liftIO $ CS.init xml
+
   gdref <- liftIO $ newIORef $ 
            GD.GData 
            mpd 
-           pbar
            playButton 
            MPD.defaultStatus 
            MPD.defaultStatus 
+           pbar
            plist
+           csong
 
   return gdref
 

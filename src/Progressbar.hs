@@ -26,7 +26,6 @@ import Graphics.UI.Gtk.Glade
 import Graphics.UI.Gtk.Gdk.Events
 
 import Data.IORef
-import Control.Monad.Trans (liftIO)
 import Data.Maybe (fromMaybe)
 
 import qualified Network.MPD as MPD
@@ -54,21 +53,21 @@ update gdref = do
 seekSong' :: GD.GuiDataRef -> Double -> Maybe MPD.Song -> IO ()
 seekSong' gdref fraction (Nothing) = return ()
 seekSong' gdref fraction (Just s) = do
-  gd <- liftIO $ readIORef gdref
+  gd <- readIORef gdref
   let pos = round ((fromInteger (MPD.sgLength s)) * fraction)
   MPDC.withMPDPersistent (GD.mpd gd) (MPD.seek (fromMaybe 0 (MPD.stSongPos (GD.currentStatus gd))) (pos))
   return ()
          
 seekSong :: GD.GuiDataRef -> Double -> IO ()
 seekSong gdref fraction = do
-  gd <- liftIO $ readIORef gdref
+  gd <- readIORef gdref
   MPDC.withMPDPersistent (GD.mpd gd) MPD.currentSong >>= 
                           (\s -> case s of (Left e) -> return ()
                                            (Right s) -> seekSong' gdref fraction s)
 
 setupSongSeek :: GD.GuiDataRef -> IO (ConnectId ProgressBar)
 setupSongSeek gdref = do
-  gd <- liftIO $ readIORef gdref
+  gd <- readIORef gdref
   onButtonPress (pbar (GD.pbar gd)) $ (\(Button _ _ _ x y _ _ _ _) -> do
                                   (w, h) <- widgetGetSize (pbar (GD.pbar gd))
                                   let fraction = x / fromInteger (toInteger (w-1))
@@ -78,11 +77,11 @@ setupSongSeek gdref = do
 
 init :: GladeXML -> IO Data
 init xml = do
-  progress <- liftIO $ xmlGetWidget xml castToProgressBar "progress"
+  progress <- xmlGetWidget xml castToProgressBar "progress"
   return $ PBData progress
 
 setup :: GD.GuiDataRef -> IO ()
 setup gdref = do
-  liftIO $ setupSongSeek gdref
+  setupSongSeek gdref
   return ()
 

@@ -20,7 +20,6 @@ module StatusUpdate
      ) where
 
 import Data.IORef
-import Control.Monad.Trans (liftIO)
 
 import Graphics.UI.Gtk
 import Graphics.UI.Gtk.Glade
@@ -30,6 +29,7 @@ import qualified Network.MPD.Core as MPDC
 
 import qualified Playlist as PL
 import qualified Progressbar as PB
+import qualified CurrentSong as CS
 
 import qualified GuiData as GD
 
@@ -45,17 +45,20 @@ statusUpdateCallback gdref pbCalback = do
   status <- getMpdStatus (GD.mpd gd)
   writeIORef gdref (GD.GData 
                           (GD.mpd gd) 
-                          (GD.pbar gd) 
                           (GD.playButton gd) 
                           (GD.currentStatus gd) 
                           status 
-                          (GD.plist gd))
+                          (GD.pbar gd) 
+                          (GD.plist gd)
+                          (GD.currentSong gd)
+                   )
   pbCalback gdref
   PB.update gdref
   PL.update gdref
+  CS.update gdref
   return True
 
 setup :: GD.GuiDataRef -> GladeXML -> (GD.GuiDataRef  -> IO ()) -> IO ()
 setup gdref xml pbCallback = do
-  liftIO $ timeoutAdd (statusUpdateCallback gdref pbCallback) 1000
+  timeoutAdd (statusUpdateCallback gdref pbCallback) 1000
   return ()

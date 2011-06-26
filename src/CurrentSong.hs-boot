@@ -14,33 +14,9 @@
 -- You should have received a copy of the GNU General Public License
 -- along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-module Util (
+module CurrentSong
+    (
+     Data,
+    ) where
 
-             prettyTime,
-             
-             showTag, showSongTag, showMaybe
-
-            ) where
-
-import Network.MPD
-    
-import Data.Map
-import Data.Time.Clock
-import Data.Time.Calendar
-import Data.Time.Format
-import System.Locale
-
-prettyTime sec =
-    formatTime defaultTimeLocale "%T" t 
-        where t = UTCTime (ModifiedJulianDay 0) (secondsToDiffTime sec)
-
-showTag :: Map Metadata [String] -> Metadata -> String
-showTag tags tag = head $ findWithDefault ["N/A"] tag tags
-
-showSongTag :: Maybe Song -> Metadata -> String
-showSongTag Nothing _ = ""
-showSongTag (Just s) tag = showTag (sgTags s) tag
-
-showMaybe :: (Show a) => Maybe a -> String
-showMaybe (Just a) = show a
-showMaybe _ = ""
+data Data

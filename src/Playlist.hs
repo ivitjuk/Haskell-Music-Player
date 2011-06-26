@@ -28,7 +28,6 @@ import Graphics.UI.Gtk.Glade
 
 import Data.IORef
 import Data.Maybe (fromMaybe)
-import Control.Monad.Trans (liftIO)
 import qualified Network.MPD as MPD
 
 import qualified Util as U
@@ -81,46 +80,46 @@ update gdref = do
 
 init :: GladeXML -> IO Data
 init xml = do
-  model <- liftIO $ listStoreNew []
-  view <- liftIO $ xmlGetWidget xml castToTreeView "currentPlaylist"
+  model <- listStoreNew []
+  view <- xmlGetWidget xml castToTreeView "currentPlaylist"
 
-  liftIO $ treeViewSetModel view model
-  liftIO $  treeViewSetHeadersVisible view True
-  liftIO $ treeViewSetRulesHint view True
+  treeViewSetModel view model
+  treeViewSetHeadersVisible view True
+  treeViewSetRulesHint view True
 
-  artistCol <- liftIO $ treeViewColumnNew
-  trackCol <- liftIO $ treeViewColumnNew
-  timeCol <- liftIO $ treeViewColumnNew
+  artistCol <- treeViewColumnNew
+  trackCol <- treeViewColumnNew
+  timeCol <- treeViewColumnNew
 
-  renderer <- liftIO $ cellRendererTextNew
+  renderer <- cellRendererTextNew
 
-  liftIO $ treeViewColumnSetTitle artistCol "Artist"
-  liftIO $ treeViewColumnSetTitle trackCol "Track"
-  liftIO $ treeViewColumnSetTitle timeCol "Length"
+  treeViewColumnSetTitle artistCol "Artist"
+  treeViewColumnSetTitle trackCol "Track"
+  treeViewColumnSetTitle timeCol "Length"
 
-  liftIO $ treeViewColumnPackStart artistCol renderer True
-  liftIO $ treeViewColumnPackStart trackCol renderer True
-  liftIO $ treeViewColumnPackStart timeCol renderer True
+  treeViewColumnPackStart artistCol renderer True
+  treeViewColumnPackStart trackCol renderer True
+  treeViewColumnPackStart timeCol renderer True
 
-  liftIO $ cellLayoutSetAttributes artistCol renderer model $ 
-             \row -> 
-             [ 
-              cellText := songArtist row ,
-              cellTextWeight := if (songIsCurrent row) then 1000 else 500
-             ]
-  liftIO $ cellLayoutSetAttributes trackCol renderer model $ \row -> [ cellText := songName row ]
-  liftIO $ cellLayoutSetAttributes timeCol renderer model $ \row -> [ cellText := songLength row ]
+  cellLayoutSetAttributes artistCol renderer model $ 
+           \row -> 
+           [ 
+            cellText := songArtist row ,
+            cellTextWeight := if (songIsCurrent row) then 1000 else 500
+           ]
+  cellLayoutSetAttributes trackCol renderer model $ \row -> [ cellText := songName row ]
+  cellLayoutSetAttributes timeCol renderer model $ \row -> [ cellText := songLength row ]
 
-  liftIO $ treeViewAppendColumn view artistCol
-  liftIO $ treeViewAppendColumn view trackCol
-  liftIO $ treeViewAppendColumn view timeCol
+  treeViewAppendColumn view artistCol
+  treeViewAppendColumn view trackCol
+  treeViewAppendColumn view timeCol
 
   return $ PLData model
 
 setup :: GD.GuiDataRef -> GladeXML -> IO ()
 setup gdref xml = do
   gd <- readIORef gdref
-  view <- liftIO $ xmlGetWidget xml castToTreeView "currentPlaylist"
-  liftIO $ onRowActivated view (\path col -> do MPDC.withMPDPersistent (GD.mpd gd) (MPD.play (Just (path !! 0)))
-                                                return ())
+  view <- xmlGetWidget xml castToTreeView "currentPlaylist"
+  onRowActivated view (\path col -> do MPDC.withMPDPersistent (GD.mpd gd) (MPD.play (Just (path !! 0)))
+                                       return ())
   return ()
