@@ -61,10 +61,8 @@ seekSong' gdref fraction (Just s) = do
 seekSong :: GD.GuiDataRef -> Double -> IO ()
 seekSong gdref fraction = do
   gd <- readIORef gdref
-  MPDC.withMPDPersistent (GD.mpd gd) MPD.currentSong >>= 
-                          (\s -> case s of (Left e) -> return ()
-                                           (Right s) -> seekSong' gdref fraction s)
-
+  MPDC.withMPDPersistent (GD.mpd gd) MPD.currentSong >>= do U.processResponse $ seekSong' gdref fraction
+                           
 setupSongSeek :: GD.GuiDataRef -> IO (ConnectId ProgressBar)
 setupSongSeek gdref = do
   gd <- readIORef gdref
@@ -84,4 +82,3 @@ setup :: GD.GuiDataRef -> IO ()
 setup gdref = do
   setupSongSeek gdref
   return ()
-

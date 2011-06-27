@@ -1,4 +1,3 @@
-{-# LANGUAGE  ScopedTypeVariables #-}
 -- Haskell Music Player, client for the MPD (Music Player Daemon)
 -- Copyright (C) 2011 Ivan Vitjuk <v@iv.id.au>
 
@@ -43,14 +42,11 @@ data Data = CSData
 update :: GD.GuiDataRef -> IO ()
 update gdref = do 
   gd <- readIORef gdref
-  MPDC.withMPDPersistent (GD.mpd gd) MPD.currentSong >>= 
-                          (\s -> case s of (Left e) -> return ()
-                                           (Right s) -> labelSetMarkup (theSong (GD.currentSong gd)) 
-                                                        ("<b>" ++ (U.showSongTag s MPD.Title) ++ 
-                                                         "</b>\n <small>by " ++ (U.showSongTag s MPD.Artist) ++ 
-                                                         " from " ++ (U.showSongTag s MPD.Album) ++ "</small>"
-                                                        ))
-  return ()
+  MPDC.withMPDPersistent (GD.mpd gd) MPD.currentSong >>= do
+                 U.processResponse $ (\song -> labelSetMarkup (theSong (GD.currentSong gd)) 
+                                               ("<b>" ++ (U.showSongTag song MPD.Title) ++ 
+                                                "</b>\n<small>by " ++ (U.showSongTag song MPD.Artist) ++ 
+                                                " from " ++ (U.showSongTag song MPD.Album) ++ "</small>"))
 
 init :: GladeXML -> IO Data
 init xml = do

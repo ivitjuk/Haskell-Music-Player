@@ -18,7 +18,9 @@ module Util (
 
              prettyTime,
              
-             showTag, showSongTag, showMaybe
+             showTag, showSongTag, showMaybe,
+
+             processResponse
 
             ) where
 
@@ -44,3 +46,11 @@ showSongTag (Just s) tag = showTag (sgTags s) tag
 showMaybe :: (Show a) => Maybe a -> String
 showMaybe (Just a) = show a
 showMaybe _ = ""
+
+processResponse :: (a -> IO ()) -> Response a -> IO ()
+processResponse cb (Left e) = do
+  putStrLn $ "MPD Error: " ++ (show e)
+  return ()
+processResponse cb (Right r) = do 
+  cb r
+  return ()

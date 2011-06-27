@@ -18,7 +18,7 @@ module Playlist
     (
      Data,
      Playlist.init, setup,
-     update, process
+     update,
      ) where
 
 import qualified Network.MPD.Core as MPDC
@@ -48,34 +48,31 @@ data Data = PLData
       model :: ListStoreType
     }
 
-process' :: Data -> Int -> Int -> [MPD.Song] -> IO ()
-process' st songIdx currentSong [] = return ()
-process' st songIdx currentSong (x:xs) = do
+process :: Data -> Int -> Int -> [MPD.Song] -> IO ()
+process st songIdx currentSong [] = return ()
+process st songIdx currentSong (x:xs) = do
   let tags = MPD.sgTags x
   listStoreAppend  (model st) $ ListStoreEntry 
                        (songIdx == currentSong)
                        (U.showTag tags MPD.Artist)
                        (U.showTag tags MPD.Title)
                        (U.prettyTime $ MPD.sgLength x)
-  process' st (songIdx+1) currentSong xs
-
-process :: Data -> Int -> MPD.Response [MPD.Song] -> IO ()
-process st currentSong (Left _) = listStoreClear (model st)
-process st currentSong (Right songs) = do
-  listStoreClear (model st)
-  process' st 0 currentSong songs
+  process st (songIdx+1) currentSong xs
 
 playListChanged :: MPD.Status -> MPD.Status -> Bool
 playListChanged cur prev = (MPD.stPlaylistVersion cur) > (MPD.stPlaylistVersion prev) ||
                            (MPD.stSongPos cur) /= (MPD.stSongPos prev)
+
 
 update :: GD.GuiDataRef -> IO ()
 update gdref = do
   gd <- readIORef gdref
   let currentSong = fromMaybe 0 (MPD.stSongPos (GD.currentStatus gd))
   if playListChanged (GD.currentStatus gd) (GD.prevStatus gd)
-   then MPDC.withMPDPersistent (GD.mpd gd) (MPD.playlistInfo Nothing) >>= 
-        process (GD.plist gd) currentSong
+   then do 
+     listStoreClear (model (GD.plist gd))
+     MPDC.withMPDPersistent (GD.mpd gd) (MPD.playlistInfo Nothing) >>= do
+         U.processResponse $ process (GD.plist gd) 0 currentSong
    else return ()
 
 init :: GladeXML -> IO Data
